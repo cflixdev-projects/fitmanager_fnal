@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FitManager - Trainer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-badge"><i class="fa-solid fa-dumbbell"></i></div>
+            <div class="brand-text">
+                <div class="b1">Fit &amp; Aktiv</div>
+                <div class="b2">FitManager Trainer</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item aktiv" data-tab="uebersicht" onclick="tabWechseln('uebersicht', this)">
+                <i class="fa-solid fa-gauge-high"></i><span>Übersicht</span>
+            </button>
+            <button class="nav-item" data-tab="kurse" onclick="tabWechseln('kurse', this)">
+                <i class="fa-solid fa-calendar-days"></i><span>Meine Kurse</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-foot">
+            <div class="sidebar-user">
+                <div class="avatar" id="trainer-avatar" style="background:#059669;">--</div>
+                <div>
+                    <div class="sidebar-user-name" id="trainer-name">-</div>
+                    <div class="sidebar-user-role">Trainer</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i><span>Abmelden</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN AREA ================= -->
+    <div class="main-area">
+
+        <!-- ===== TAB: UEBERSICHT ===== -->
+        <div id="tab-uebersicht" class="tab-inhalt sichtbar">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h2>Übersicht</h2>
+                    <p>Dein persönlicher Kursplan auf einen Blick.</p>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="kachel-reihe">
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-brand"><i class="fa-solid fa-calendar-check"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-eigene-kurse">-</div>
+                        <div class="label">Meine Kurse diese Woche</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-info"><i class="fa-solid fa-scale-balanced"></i></div>
+                        </div>
+                        <div class="zahl" id="max-kurse">-</div>
+                        <div class="label">Max. erlaubte Kurse</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-warn"><i class="fa-solid fa-briefcase"></i></div>
+                        </div>
+                        <div class="zahl" id="mein-typ">-</div>
+                        <div class="label">Anstellung</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-brand"><i class="fa-solid fa-heart-pulse"></i></div>
+                        </div>
+                        <div class="zahl" id="mein-status">-</div>
+                        <div class="label">Mein Status</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h3><i class="fa-solid fa-calendar-week"></i> Meine Wochenansicht</h3>
+                    </div>
+                    <div class="wochenansicht" id="wochenansicht"></div>
+                    <div class="legende">
+                        <span class="legende-item"><span class="legende-punkt kk-gruen"></span> Findet statt</span>
+                        <span class="legende-item"><span class="legende-punkt kk-gelb"></span> Vertretung</span>
+                        <span class="legende-item"><span class="legende-punkt kk-rot"></span> Abgesagt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB: KURSE ===== -->
+        <div id="tab-kurse" class="tab-inhalt">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h2>Mein Kursplan</h2>
+                    <p>Bei Krankheit sucht das System automatisch eine Vertretung.</p>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Kurs</th>
+                                <th>Wochentag</th>
+                                <th>Uhrzeit</th>
+                                <th>Raum</th>
+                                <th>Status</th>
+                                <th>Vertretung</th>
+                                <th>Aktion</th>
+                            </tr>
+                            </thead>
+                            <tbody id="eigene-kurse-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="js/trainer.js"></script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FitManager - Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-badge"><i class="fa-solid fa-dumbbell"></i></div>
+            <div class="brand-text">
+                <div class="b1">Fit &amp; Aktiv</div>
+                <div class="b2">FitManager Admin</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item aktiv" data-tab="uebersicht" onclick="tabWechseln('uebersicht', this)">
+                <i class="fa-solid fa-gauge-high"></i><span>Übersicht</span>
+            </button>
+            <button class="nav-item" data-tab="kurse" onclick="tabWechseln('kurse', this)">
+                <i class="fa-solid fa-calendar-days"></i><span>Kurse</span>
+            </button>
+            <button class="nav-item" data-tab="mitarbeiter" onclick="tabWechseln('mitarbeiter', this)">
+                <i class="fa-solid fa-users"></i><span>Mitarbeiter</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-foot">
+            <div class="sidebar-user">
+                <div class="avatar" id="admin-avatar" style="background:#059669;">--</div>
+                <div>
+                    <div class="sidebar-user-name" id="admin-name">-</div>
+                    <div class="sidebar-user-role">Administrator</div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i><span>Abmelden</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN AREA ================= -->
+    <div class="main-area">
+
+        <!-- ===== TAB: UEBERSICHT ===== -->
+        <div id="tab-uebersicht" class="tab-inhalt sichtbar">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h2>Übersicht</h2>
+                    <p>Willkommen zurück – hier ist der aktuelle Stand deines Studios.</p>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="kachel-reihe">
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-brand"><i class="fa-solid fa-calendar-check"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-kurse">-</div>
+                        <div class="label">Kurse gesamt</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-info"><i class="fa-solid fa-user-tie"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-trainer">-</div>
+                        <div class="label">Trainer</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-brand"><i class="fa-solid fa-sun"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-heute">-</div>
+                        <div class="label">Kurse heute</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-warn"><i class="fa-solid fa-truck-medical"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-krankmeldungen">-</div>
+                        <div class="label">Krankmeldungen</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-info"><i class="fa-solid fa-people-arrows"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-vertretungen">-</div>
+                        <div class="label">Vertretungen</div>
+                    </div>
+                    <div class="kachel">
+                        <div class="kachel-top">
+                            <div class="icon-badge ib-danger"><i class="fa-solid fa-ban"></i></div>
+                        </div>
+                        <div class="zahl" id="anzahl-abgesagt">-</div>
+                        <div class="label">Abgesagte Kurse</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h3><i class="fa-solid fa-calendar-week"></i> Wochenübersicht (alle Kurse)</h3>
+                    </div>
+                    <div class="wochenansicht" id="wochenansicht"></div>
+                    <div class="legende">
+                        <span class="legende-item"><span class="legende-punkt kk-gruen"></span> Findet statt</span>
+                        <span class="legende-item"><span class="legende-punkt kk-gelb"></span> Vertretung</span>
+                        <span class="legende-item"><span class="legende-punkt kk-rot"></span> Abgesagt</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h3><i class="fa-solid fa-bell"></i> Letzte Benachrichtigungen</h3>
+                    </div>
+                    <ul class="feed" id="ereignis-feed"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB: KURSE ===== -->
+        <div id="tab-kurse" class="tab-inhalt">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h2>Kursverwaltung</h2>
+                    <p>Alle Kurse dauern einheitlich 60 Minuten.</p>
+                </div>
+                <div class="topbar-actions">
+                    <div class="search-field">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="kurs-suche" placeholder="Kurs suchen..." oninput="kurseRendern()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <p id="verteilen-hinweis" class="hinweis-text"></p>
+
+                <div class="card">
+                    <div class="abschnitt-kopf">
+                        <div class="toolbar">
+                            <select id="kurs-filter-status" class="filter-select" onchange="kurseRendern()">
+                                <option value="">Alle Status</option>
+                                <option value="GEPLANT">Geplant</option>
+                                <option value="ABGESAGT">Abgesagt</option>
+                            </select>
+                            <select id="kurs-filter-trainer" class="filter-select" onchange="kurseRendern()">
+                                <option value="">Alle Trainer</option>
+                            </select>
+                        </div>
+                        <div class="toolbar">
+                            <button class="btn btn-grau" onclick="kurseVerteilen()">
+                                <i class="fa-solid fa-shuffle"></i> Automatisch verteilen
+                            </button>
+                            <button class="btn btn-gruen" onclick="kursFormularAnzeigen()">
+                                <i class="fa-solid fa-plus"></i> Neuer Kurs
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th onclick="kursSortieren('name')">Kurs <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="kursSortieren('wochentag')">Wochentag <i class="fa-solid fa-sort"></i></th>
+                                <th onclick="kursSortieren('startzeit')">Uhrzeit <i class="fa-solid fa-sort"></i></th>
+                                <th>Dauer</th>
+                                <th>Raum</th>
+                                <th>Trainer</th>
+                                <th>Vertretung</th>
+                                <th>Status</th>
+                                <th>Aktionen</th>
+                            </tr>
+                            </thead>
+                            <tbody id="kurs-tabelle-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TAB: MITARBEITER ===== -->
+        <div id="tab-mitarbeiter" class="tab-inhalt">
+            <div class="topbar">
+                <div class="topbar-title">
+                    <h2>Mitarbeiterverwaltung</h2>
+                    <p>Trainer &amp; Admins, Verfügbarkeiten und Auslastung.</p>
+                </div>
+                <div class="topbar-actions">
+                    <div class="search-field">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="ma-suche" placeholder="Mitarbeiter suchen..." oninput="mitarbeiterRendern()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="card">
+                    <div class="abschnitt-kopf">
+                        <div class="toolbar">
+                            <select id="ma-filter-rolle" class="filter-select" onchange="mitarbeiterRendern()">
+                                <option value="">Alle Rollen</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="TRAINER">Trainer</option>
+                            </select>
+                            <select id="ma-filter-status" class="filter-select" onchange="mitarbeiterRendern()">
+                                <option value="">Alle Status</option>
+                                <option value="AKTIV">Aktiv</option>
+                                <option value="KRANK">Krank</option>
+                                <option value="INAKTIV">Inaktiv</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-gruen" onclick="mitarbeiterFormularAnzeigen()">
+                            <i class="fa-solid fa-user-plus"></i> Neuer Mitarbeiter
+                        </button>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Mitarbeiter</th>
+                                <th>Rolle</th>
+                                <th>Typ</th>
+                                <th>Standort</th>
+                                <th>Verfügbarkeit</th>
+                                <th>Kurse / Woche</th>
+                                <th>Status</th>
+                                <th>Aktionen</th>
+                            </tr>
+                            </thead>
+                            <tbody id="mitarbeiter-tabelle-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= MODAL: KURS ================= -->
+<div id="kurs-modal" class="modal-overlay versteckt">
+    <div class="modal-box formular-box">
+        <h3><i class="fa-solid fa-calendar-plus"></i> <span id="kurs-modal-titel">Neuer Kurs</span></h3>
+        <input type="hidden" id="kurs-id">
+        <div class="form-grid">
+            <div class="field span2">
+                <label>Kursname</label>
+                <input type="text" id="kurs-name" placeholder="z.B. Yoga">
+            </div>
+            <div class="field">
+                <label>Wochentag</label>
+                <select id="kurs-wochentag">
+                    <option>Montag</option>
+                    <option>Dienstag</option>
+                    <option>Mittwoch</option>
+                    <option>Donnerstag</option>
+                    <option>Freitag</option>
+                    <option>Samstag</option>
+                    <option>Sonntag</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Startzeit</label>
+                <input type="time" id="kurs-startzeit">
+            </div>
+            <div class="field">
+                <label>Dauer</label>
+                <input type="text" value="60 Minuten (fest)" disabled>
+            </div>
+            <div class="field">
+                <label>Standort</label>
+                <select id="kurs-standort" onchange="kursRaumAuswahlFuellen()"></select>
+            </div>
+            <div class="field">
+                <label>Raum</label>
+                <select id="kurs-raum"></select>
+            </div>
+            <div class="field span2">
+                <label>Trainer</label>
+                <select id="kurs-trainer">
+                    <option value="">-- automatisch zuweisen --</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-grau" onclick="kursFormularVerstecken()">Abbrechen</button>
+            <button class="btn btn-gruen" onclick="kursSpeichern()"><i class="fa-solid fa-check"></i> Speichern</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL: MITARBEITER ================= -->
+<div id="mitarbeiter-modal" class="modal-overlay versteckt">
+    <div class="modal-box formular-box">
+        <h3><i class="fa-solid fa-user-gear"></i> <span id="ma-modal-titel">Neuer Mitarbeiter</span></h3>
+        <input type="hidden" id="ma-id">
+        <div class="form-grid">
+            <div class="field">
+                <label>Vorname</label>
+                <input type="text" id="ma-vorname">
+            </div>
+            <div class="field">
+                <label>Nachname</label>
+                <input type="text" id="ma-nachname">
+            </div>
+            <div class="field">
+                <label>Benutzername</label>
+                <input type="text" id="ma-benutzername" placeholder="z.B. max.mustermann">
+            </div>
+            <div class="field">
+                <label>E-Mail (optional)</label>
+                <input type="email" id="ma-email">
+            </div>
+            <div class="field span2">
+                <label>Passwort</label>
+                <input type="password" id="ma-passwort" placeholder="Nur ausfüllen zum Ändern">
+            </div>
+            <div class="field">
+                <label>Rolle</label>
+                <select id="ma-rolle" onchange="rolleGeaendert()">
+                    <option value="TRAINER">Trainer</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Anstellung</label>
+                <select id="ma-typ">
+                    <option value="VOLLZEIT">Vollzeit (max. 20 Kurse)</option>
+                    <option value="TEILZEIT">Teilzeit (max. 10 Kurse)</option>
+                </select>
+            </div>
+            <div class="field span2">
+                <label>Standort</label>
+                <select id="ma-studio"></select>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-grau" onclick="mitarbeiterFormularVerstecken()">Abbrechen</button>
+            <button class="btn btn-gruen" onclick="mitarbeiterSpeichern()"><i class="fa-solid fa-check"></i> Speichern</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
