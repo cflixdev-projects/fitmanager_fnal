@@ -1,4 +1,4 @@
-// logik adminseite, alles in einer datei
+// logik adminseite
 
 let alleMitarbeiterListe = []; // wird gebraucht um bei den Kursen den Trainernamen anzuzeigen
 let alleRaeumeListe = [];
@@ -75,7 +75,7 @@ function tabWechseln(name, button) {
 function uebersichtLaden() {
     document.getElementById("anzahl-kurse").innerText = alleKurseListe.length;
 
-    const heuteIndex = (new Date().getDay() + 6) % 7; // JS: 0=So .. wir wollen 0=Mo
+    const heuteIndex = (new Date().getDay() + 6) % 7; // JS: 0=So | wir wollen 0=Mo
     const heuteName = WOCHENTAGE[heuteIndex];
     document.getElementById("anzahl-heute").innerText =
         alleKurseListe.filter(k => k.wochentag === heuteName).length;
@@ -275,7 +275,7 @@ function standortVonRaum(raumId) {
     return alleStudiosListe.find(s => s.id === raum.studioId);
 }
 
-// baut ein lesbares label wie "Raum A · Studio Krefeld" fuer kursliste,
+// baut "Raum A · Studio Krefeld" fuer kursliste,
 // wochenuebersicht und traineransicht
 function raumLabel(raumId) {
     const raum = alleRaeumeListe.find(r => r.id === raumId);
