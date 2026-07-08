@@ -56,15 +56,13 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>de.fitmanager.FitManagerApplication</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
+        <plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <mainClass>de.fitmanager.FitManagerApplication</mainClass>
+    </configuration>
+</plugin>
     </build>
 
 </project>
