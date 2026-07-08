@@ -60,6 +60,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>de.fitmanager.FitManagerApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
